@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAppContext } from '../../contexts/AppContext';
 import type { AppearanceSettings, CustomLink } from '../../types';
+import { getDisplayableGoogleDriveImageUrl } from '../../components/IconComponents';
 
 const AdminAppearancePage: React.FC = () => {
     const { appearanceSettings, setAppearanceSettings } = useAppContext();
@@ -103,11 +104,11 @@ const AdminAppearancePage: React.FC = () => {
                         <div>
                            <label htmlFor="logoUrl" className="block font-medium mb-1 text-gray-700">Logo</label>
                            <input id="logoUrl" name="logoUrl" type="file" accept="image/*" onChange={handleLogoChange} className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
-                           {formState.logoUrl && <img src={formState.logoUrl} alt="Logo Preview" className="mt-4 rounded-md max-h-16 bg-gray-200 p-2" />}
+                           {formState.logoUrl && <img src={getDisplayableGoogleDriveImageUrl(formState.logoUrl)} alt="Logo Preview" className="mt-4 rounded-md max-h-16 bg-gray-200 p-2" />}
                         </div>
                          <div>
                            <label className="block font-medium mb-2 text-gray-700">Homepage Video</label>
-                           <div className="flex gap-4 mb-2">
+                           <div className="flex gap-4 mb-2 flex-wrap">
                                <label className="flex items-center">
                                    <input type="radio" name="videoSource" value="youtube" checked={formState.videoSource === 'youtube'} onChange={handleChange} className="form-radio" />
                                    <span className="ml-2">YouTube URL</span>
@@ -115,6 +116,10 @@ const AdminAppearancePage: React.FC = () => {
                                <label className="flex items-center">
                                    <input type="radio" name="videoSource" value="upload" checked={formState.videoSource === 'upload'} onChange={handleChange} className="form-radio" />
                                    <span className="ml-2">Upload Video</span>
+                               </label>
+                               <label className="flex items-center">
+                                   <input type="radio" name="videoSource" value="googledrive" checked={formState.videoSource === 'googledrive'} onChange={handleChange} className="form-radio" />
+                                   <span className="ml-2">Google Drive URL</span>
                                </label>
                            </div>
                            {formState.videoSource === 'youtube' && (
@@ -127,6 +132,9 @@ const AdminAppearancePage: React.FC = () => {
                                        <video src={formState.homepageVideoData} controls className="mt-4 rounded-md max-h-48" muted />
                                    )}
                                </div>
+                           )}
+                            {formState.videoSource === 'googledrive' && (
+                                <input name="homepageVideoUrl" value={formState.homepageVideoUrl} onChange={handleChange} className="w-full p-2 border rounded" placeholder="Enter Google Drive share URL"/>
                            )}
                         </div>
                     </div>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAppContext } from '../contexts/AppContext';
-import { HeartIcon } from '../components/IconComponents';
+import { HeartIcon, getDisplayableGoogleDriveImageUrl } from '../components/IconComponents';
 
 const ProductDetailPage: React.FC = () => {
   const { productId } = useParams<{ productId: string }>();
@@ -62,7 +62,7 @@ const ProductDetailPage: React.FC = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
           <div>
-            <img src={product.imageUrl} alt={product.name} className="w-full h-auto rounded-lg shadow-lg" />
+            <img src={getDisplayableGoogleDriveImageUrl(product.imageUrl)} alt={product.name} className="w-full h-auto rounded-lg shadow-lg" />
           </div>
           <div>
             <h2 className="text-sm text-blue-500 font-semibold tracking-widest uppercase">{product.category}</h2>

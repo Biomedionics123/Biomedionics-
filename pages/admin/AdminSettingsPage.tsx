@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAppContext } from '../../contexts/AppContext';
+import { getDisplayableGoogleDriveImageUrl } from '../../components/IconComponents';
 
 const AdminSettingsPage: React.FC = () => {
     const { siteSettings, setSiteSettings } = useAppContext();
@@ -59,7 +60,7 @@ const AdminSettingsPage: React.FC = () => {
                         <div>
                            <label htmlFor="teamImageUrl" className="block font-medium mb-1 text-gray-700">Team Image URL</label>
                            <input id="teamImageUrl" name="teamImageUrl" value={settingsForm.teamImageUrl} onChange={handleSettingsChange} className="w-full p-2 border rounded" />
-                           {settingsForm.teamImageUrl && <img src={settingsForm.teamImageUrl} alt="Team Preview" className="mt-4 rounded-md max-h-48" />}
+                           {settingsForm.teamImageUrl && <img src={getDisplayableGoogleDriveImageUrl(settingsForm.teamImageUrl)} alt="Team Preview" className="mt-4 rounded-md max-h-48" />}
                         </div>
                         <div>
                            <label htmlFor="awardText" className="block font-medium mb-1 text-gray-700">Award Text</label>

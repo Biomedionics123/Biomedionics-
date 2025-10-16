@@ -5,6 +5,7 @@ import { SERVICES } from '../constants';
 import { useAppContext } from '../contexts/AppContext';
 import { ReviewStatus } from '../types';
 import StarRating from '../components/StarRating';
+import { getDisplayableGoogleDriveImageUrl } from '../components/IconComponents';
 
 // Helper to convert YouTube URL to embeddable URL
 const getYouTubeEmbedUrl = (url: string) => {
@@ -27,12 +28,24 @@ const getYouTubeEmbedUrl = (url: string) => {
     return '';
 };
 
+// Helper to convert Google Drive URL to embeddable URL for videos
+const getGoogleDriveEmbedUrl = (url: string) => {
+    if (!url || typeof url !== 'string' || !url.includes('drive.google.com')) return '';
+
+    const match = url.match(/drive\.google\.com.*\/d\/([^/]+)/);
+    if (match && match[1]) {
+        return `https://drive.google.com/file/d/${match[1]}/preview`;
+    }
+    return '';
+};
+
 const HomePage: React.FC = () => {
   const { products, siteSettings, reviews, appearanceSettings } = useAppContext();
   const approvedReviews = reviews.filter(r => r.status === ReviewStatus.Approved);
   
   const videoSource = appearanceSettings.videoSource;
   const youtubeEmbedUrl = videoSource === 'youtube' ? getYouTubeEmbedUrl(appearanceSettings.homepageVideoUrl) : '';
+  const googleDriveEmbedUrl = videoSource === 'googledrive' ? getGoogleDriveEmbedUrl(appearanceSettings.homepageVideoUrl) : '';
   const uploadedVideoUrl = videoSource === 'upload' ? appearanceSettings.homepageVideoData : '';
 
 
@@ -49,6 +62,19 @@ const HomePage: React.FC = () => {
             style={{minWidth: '177.77vh', minHeight: '100vw'}}
         ></iframe>
       );
+    }
+    if (videoSource === 'googledrive' && googleDriveEmbedUrl) {
+        return (
+            <iframe
+                className="absolute top-1/2 left-1/2 w-full h-full -translate-x-1/2 -translate-y-1/2"
+                src={googleDriveEmbedUrl}
+                title="Google Drive video player"
+                frameBorder="0"
+                allow="autoplay"
+                allowFullScreen
+                style={{minWidth: '177.77vh', minHeight: '100vw'}}
+            ></iframe>
+        );
     }
     if (videoSource === 'upload' && uploadedVideoUrl) {
         return (
@@ -139,7 +165,7 @@ const HomePage: React.FC = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto text-center">
                 <h2 className="text-3xl font-bold text-gray-900">Award-Winning Innovation</h2>
-                <img src={siteSettings.teamImageUrl} alt="The Biomedionics Team" className="rounded-lg shadow-xl mx-auto my-8 w-full h-auto object-cover" style={{maxHeight: '400px'}} />
+                <img src={getDisplayableGoogleDriveImageUrl(siteSettings.teamImageUrl)} alt="The Biomedionics Team" className="rounded-lg shadow-xl mx-auto my-8 w-full h-auto object-cover" style={{maxHeight: '400px'}} />
                 <p className="text-xl text-yellow-500 font-semibold">
                   &#9733; {siteSettings.awardText} &#9733;
                 </p>

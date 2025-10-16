@@ -50,7 +50,7 @@ export interface CustomLink {
 export interface AppearanceSettings {
   siteName: string;
   logoUrl: string;
-  videoSource: 'youtube' | 'upload';
+  videoSource: 'youtube' | 'upload' | 'googledrive';
   homepageVideoUrl: string;
   homepageVideoData: string; // base64 encoded video data
   primaryColor: string;

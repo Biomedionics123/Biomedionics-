@@ -1,7 +1,7 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAppContext } from '../contexts/AppContext';
+import { getDisplayableGoogleDriveImageUrl } from '../components/IconComponents';
 
 const BlogPage: React.FC = () => {
     const { blogPosts } = useAppContext();
@@ -17,7 +17,7 @@ const BlogPage: React.FC = () => {
                     {blogPosts.map((post) => (
                         <Link key={post.id} to={`/blog/${post.id}`} className="block group">
                            <div className="bg-white rounded-lg shadow-md overflow-hidden transition-shadow duration-300 group-hover:shadow-xl">
-                                <img className="w-full h-64 object-cover" src={post.imageUrl} alt={post.title} />
+                                <img className="w-full h-64 object-cover" src={getDisplayableGoogleDriveImageUrl(post.imageUrl)} alt={post.title} />
                                 <div className="p-8">
                                     <h2 className="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{post.title}</h2>
                                     <p className="text-sm text-gray-500 mt-2">By {post.author} on {new Date(post.date).toLocaleDateString()}</p>

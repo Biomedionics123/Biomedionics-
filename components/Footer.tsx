@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { DnaIcon } from './IconComponents';
+import { DnaIcon, getDisplayableGoogleDriveImageUrl } from './IconComponents';
 import { useAppContext } from '../contexts/AppContext';
 
 const Footer: React.FC = () => {
@@ -15,7 +15,7 @@ const Footer: React.FC = () => {
           <div className="space-y-4">
              <Link to="/" className="flex items-center gap-2">
               {appearanceSettings.logoUrl ? (
-                <img src={appearanceSettings.logoUrl} alt={`${appearanceSettings.siteName} Logo`} className="h-10 w-auto" />
+                <img src={getDisplayableGoogleDriveImageUrl(appearanceSettings.logoUrl)} alt={`${appearanceSettings.siteName} Logo`} className="h-10 w-auto" />
               ) : (
                 <DnaIcon className="h-8 w-8" style={{color: appearanceSettings.primaryColor}} />
               )}
