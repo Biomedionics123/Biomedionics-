@@ -5,7 +5,7 @@ import { ChatBubbleIcon, XIcon, SendIcon, DnaIcon } from './IconComponents';
 import type { ChatMessage } from '../types';
 import { ChatRole } from '../types';
 
-const API_KEY = process.env.API_KEY;
+const API_KEY = typeof process !== 'undefined' && process.env ? process.env.API_KEY : undefined;
 
 const Chatbot: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
