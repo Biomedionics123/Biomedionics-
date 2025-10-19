@@ -136,3 +136,52 @@ export interface Notification {
     createdAt: string;
     isRead: boolean;
 }
+
+// Full data structure for import/export
+export interface FullSiteData {
+    products: Product[];
+    blogPosts: BlogPost[];
+    siteSettings: SiteSettings;
+    appearanceSettings: AppearanceSettings;
+    dynamicPages: DynamicPage[];
+    reviews: Review[];
+    orders: Order[];
+    notifications: Notification[];
+}
+
+
+export interface AppContextType {
+    products: Product[];
+    setProducts: (products: Product[]) => void;
+    blogPosts: BlogPost[];
+    setBlogPosts: (posts: BlogPost[]) => void;
+    siteSettings: SiteSettings;
+    setSiteSettings: (settings: SiteSettings) => void;
+    appearanceSettings: AppearanceSettings;
+    setAppearanceSettings: (settings: AppearanceSettings) => void;
+    dynamicPages: DynamicPage[];
+    setDynamicPages: (pages: DynamicPage[]) => void;
+    cart: CartItem[];
+    addToCart: (product: Product, quantity: number) => void;
+    updateCartQuantity: (productId: string, quantity: number) => void;
+    removeFromCart: (productId: string) => void;
+    clearCart: () => void;
+    cartTotal: number;
+    wishlist: Product[];
+    addToWishlist: (product: Product) => void;
+    removeFromWishlist: (productId: string) => void;
+    isInWishlist: (productId: string) => boolean;
+    orders: Order[];
+    addOrder: (customerDetails: CustomerDetails) => Order;
+    updateOrderStatus: (orderId: string, status: OrderStatus) => void;
+    reviews: Review[];
+    addReview: (order: Order, rating: number, comment: string) => void;
+    updateReviewStatus: (reviewId: string, status: ReviewStatus) => void;
+    deleteReview: (reviewId: string) => void;
+    notifications: Notification[];
+    addNotification: (notification: Omit<Notification, 'id' | 'createdAt' | 'isRead'>) => void;
+    markNotificationAsRead: (notificationId: string) => void;
+    markAllNotificationsAsRead: () => void;
+    exportAllData: () => void;
+    importAllData: (file: File) => void;
+}

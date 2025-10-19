@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useNavigate, Link } from 'react-router-dom';
-import { DashboardIcon, PackageIcon, FileTextIcon, SettingsIcon, LogOutIcon, DnaIcon, ClipboardListIcon, MessageSquareIcon, PaletteIcon, LayersIcon, BellIcon } from '../IconComponents';
+import { DashboardIcon, PackageIcon, FileTextIcon, SettingsIcon, LogOutIcon, DnaIcon, ClipboardListIcon, MessageSquareIcon, PaletteIcon, LayersIcon, BellIcon, DatabaseIcon } from '../IconComponents';
 import { useAppContext } from '../../contexts/AppContext';
 
 const AdminSidebar: React.FC = () => {
@@ -56,6 +56,9 @@ const AdminSidebar: React.FC = () => {
             </NavLink>
             <NavLink to="/admin/settings" className={linkClasses}>
                 <div className="flex items-center"><SettingsIcon className="h-5 w-5 mr-3" />Site Settings</div>
+            </NavLink>
+             <NavLink to="/admin/data" className={linkClasses}>
+                <div className="flex items-center"><DatabaseIcon className="h-5 w-5 mr-3" />Data Management</div>
             </NavLink>
         </nav>
         <div className="px-4 py-4 border-t border-gray-700">

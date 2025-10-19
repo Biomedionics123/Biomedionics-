@@ -37,6 +37,7 @@ import AdminReviewsPage from './pages/admin/AdminReviewsPage';
 import AdminAppearancePage from './pages/admin/AdminAppearancePage';
 import AdminPagesPage from './pages/admin/AdminPagesPage';
 import AdminNotificationsPage from './pages/admin/AdminNotificationsPage';
+import AdminDataPage from './pages/admin/AdminDataPage';
 
 const ThemeStyleInjector: React.FC = () => {
   const { appearanceSettings } = useAppContext();
@@ -109,6 +110,7 @@ const AppContent: React.FC = () => {
             <Route path="notifications" element={<AdminNotificationsPage />} />
             <Route path="settings" element={<AdminSettingsPage />} />
             <Route path="appearance" element={<AdminAppearancePage />} />
+            <Route path="data" element={<AdminDataPage />} />
           </Route>
         </Routes>
       </main>

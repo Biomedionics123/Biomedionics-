@@ -1,52 +1,19 @@
 import React, { createContext, useState, useEffect, ReactNode, useContext } from 'react';
-import type { Product, BlogPost, SiteSettings, CartItem, Order, CustomerDetails, Review, AppearanceSettings, DynamicPage, Notification } from '../types';
+import type { Product, BlogPost, SiteSettings, CartItem, Order, CustomerDetails, Review, AppearanceSettings, DynamicPage, Notification, FullSiteData, AppContextType } from '../types';
 import { OrderStatus, ReviewStatus, NotificationType } from '../types';
-import { INITIAL_PRODUCTS, INITIAL_BLOG_POSTS, INITIAL_SITE_SETTINGS, INITIAL_REVIEWS, INITIAL_APPEARANCE_SETTINGS, INITIAL_DYNAMIC_PAGES, INITIAL_NOTIFICATIONS } from '../constants';
+import { INITIAL_PRODUCTS, INITIAL_BLOG_POSTS, INITIAL_SITE_SETTINGS, INITIAL_REVIEWS, INITIAL_APPEARANCE_SETTINGS, INITIAL_DYNAMIC_PAGES, INITIAL_NOTIFICATIONS, INITIAL_ORDERS } from '../data';
 
-// Helper to get data from localStorage
+// Helper to get data from localStorage, falling back to initial data from data.ts
 const getFromStorage = <T,>(key: string, defaultValue: T): T => {
     try {
         const item = window.localStorage.getItem(key);
+        // If the item exists in storage, use it. Otherwise, use the default from data.ts
         return item ? JSON.parse(item) : defaultValue;
     } catch (error) {
         console.error(`Error reading from localStorage key “${key}”:`, error);
         return defaultValue;
     }
 };
-
-interface AppContextType {
-    products: Product[];
-    setProducts: (products: Product[]) => void;
-    blogPosts: BlogPost[];
-    setBlogPosts: (posts: BlogPost[]) => void;
-    siteSettings: SiteSettings;
-    setSiteSettings: (settings: SiteSettings) => void;
-    appearanceSettings: AppearanceSettings;
-    setAppearanceSettings: (settings: AppearanceSettings) => void;
-    dynamicPages: DynamicPage[];
-    setDynamicPages: (pages: DynamicPage[]) => void;
-    cart: CartItem[];
-    addToCart: (product: Product, quantity: number) => void;
-    updateCartQuantity: (productId: string, quantity: number) => void;
-    removeFromCart: (productId: string) => void;
-    clearCart: () => void;
-    cartTotal: number;
-    wishlist: Product[];
-    addToWishlist: (product: Product) => void;
-    removeFromWishlist: (productId: string) => void;
-    isInWishlist: (productId: string) => boolean;
-    orders: Order[];
-    addOrder: (customerDetails: CustomerDetails) => Order;
-    updateOrderStatus: (orderId: string, status: OrderStatus) => void;
-    reviews: Review[];
-    addReview: (order: Order, rating: number, comment: string) => void;
-    updateReviewStatus: (reviewId: string, status: ReviewStatus) => void;
-    deleteReview: (reviewId: string) => void;
-    notifications: Notification[];
-    addNotification: (notification: Omit<Notification, 'id' | 'createdAt' | 'isRead'>) => void;
-    markNotificationAsRead: (notificationId: string) => void;
-    markAllNotificationsAsRead: () => void;
-}
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -58,10 +25,11 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({ children
     const [dynamicPages, setDynamicPagesState] = useState<DynamicPage[]>(() => getFromStorage('biomedionics_dynamicPages', INITIAL_DYNAMIC_PAGES));
     const [cart, setCart] = useState<CartItem[]>(() => getFromStorage('biomedionics_cart', []));
     const [wishlist, setWishlist] = useState<Product[]>(() => getFromStorage('biomedionics_wishlist', []));
-    const [orders, setOrders] = useState<Order[]>(() => getFromStorage('biomedionics_orders', []));
+    const [orders, setOrders] = useState<Order[]>(() => getFromStorage('biomedionics_orders', INITIAL_ORDERS));
     const [reviews, setReviews] = useState<Review[]>(() => getFromStorage('biomedionics_reviews', INITIAL_REVIEWS));
     const [notifications, setNotifications] = useState<Notification[]>(() => getFromStorage('biomedionics_notifications', INITIAL_NOTIFICATIONS));
 
+    // Persist admin changes to their local browser storage
     useEffect(() => { localStorage.setItem('biomedionics_products', JSON.stringify(products)); }, [products]);
     useEffect(() => { localStorage.setItem('biomedionics_blogPosts', JSON.stringify(blogPosts)); }, [blogPosts]);
     useEffect(() => { localStorage.setItem('biomedionics_siteSettings', JSON.stringify(siteSettings)); }, [siteSettings]);
@@ -78,6 +46,53 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({ children
     const setSiteSettings = (newSettings: SiteSettings) => setSiteSettingsState(newSettings);
     const setAppearanceSettings = (newSettings: AppearanceSettings) => setAppearanceSettingsState(newSettings);
     const setDynamicPages = (newPages: DynamicPage[]) => setDynamicPagesState(newPages);
+
+    const exportAllData = () => {
+        const fullData: FullSiteData = {
+            products,
+            blogPosts,
+            siteSettings,
+            appearanceSettings,
+            dynamicPages,
+            reviews,
+            orders,
+            notifications
+        };
+        const dataStr = JSON.stringify(fullData, null, 2);
+        const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+        
+        const exportFileDefaultName = 'biomedionics-data.json';
+        
+        const linkElement = document.createElement('a');
+        linkElement.setAttribute('href', dataUri);
+        linkElement.setAttribute('download', exportFileDefaultName);
+        linkElement.click();
+    };
+    
+    const importAllData = (file: File) => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            try {
+                const data = JSON.parse(event.target?.result as string) as FullSiteData;
+                if (window.confirm('Are you sure you want to import this data? This will overwrite all current settings and content in your local admin panel.')) {
+                    // Validate and set each piece of state
+                    if (data.products) setProductsState(data.products);
+                    if (data.blogPosts) setBlogPostsState(data.blogPosts);
+                    if (data.siteSettings) setSiteSettingsState(data.siteSettings);
+                    if (data.appearanceSettings) setAppearanceSettingsState(data.appearanceSettings);
+                    if (data.dynamicPages) setDynamicPagesState(data.dynamicPages);
+                    if (data.reviews) setReviews(data.reviews);
+                    if (data.orders) setOrders(data.orders);
+                    if (data.notifications) setNotifications(data.notifications);
+                    alert('Data imported successfully!');
+                }
+            } catch (e) {
+                alert('Error parsing JSON file. Please make sure the file is valid.');
+                console.error("Error importing data:", e);
+            }
+        };
+        reader.readAsText(file);
+    };
 
     const addToCart = (product: Product, quantity: number) => {
         setCart(prevCart => {
@@ -244,7 +259,8 @@ TOTAL: ${cartTotal.toFixed(2)} ${newOrder.currency}
             wishlist, addToWishlist, removeFromWishlist, isInWishlist,
             orders, addOrder, updateOrderStatus,
             reviews, addReview, updateReviewStatus, deleteReview,
-            notifications, addNotification, markNotificationAsRead, markAllNotificationsAsRead
+            notifications, addNotification, markNotificationAsRead, markAllNotificationsAsRead,
+            exportAllData, importAllData
         }}>
             {children}
         </AppContext.Provider>
