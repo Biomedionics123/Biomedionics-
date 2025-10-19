@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { GoogleGenAI, Chat } from "@google/genai";
+import type { GoogleGenAI, Chat } from "@google/genai";
 import { ChatBubbleIcon, XIcon, SendIcon, DnaIcon } from './IconComponents';
 import type { ChatMessage } from '../types';
 import { ChatRole } from '../types';
@@ -36,23 +36,33 @@ const Chatbot: React.FC = () => {
     }, [messages]);
 
     useEffect(() => {
-        if (!API_KEY) {
-            return;
-        }
-        if (isOpen && !chat) {
-            const ai = new GoogleGenAI({ apiKey: API_KEY });
-            const newChat = ai.chats.create({
-                model: 'gemini-2.5-flash',
-                config: {
-                    systemInstruction: 'You are a friendly and knowledgeable sales assistant for Biomedionics, a company that sells and services advanced biomedical devices. Your goal is to help users find the right products or services for their needs. Be concise, helpful, and professional. Our main products are the "Diasense DPN Scanner" for non-invasive Diabetic Peripheral Neuropathy detection, and the "3D Bioprinter X1" for research. We also offer maintenance and repair services.',
-                },
-            });
-            setChat(newChat);
-            setMessages([{
-                role: ChatRole.MODEL,
-                text: "Hello! I'm the Biomedionics assistant. How can I help you with our Diasense scanner or 3D bioprinters today?"
-            }]);
-        }
+        const initializeChat = async () => {
+            if (isOpen && !chat && API_KEY) {
+                try {
+                    const { GoogleGenAI } = await import('@google/genai');
+                    const ai = new GoogleGenAI({ apiKey: API_KEY });
+                    const newChat = ai.chats.create({
+                        model: 'gemini-2.5-flash',
+                        config: {
+                            systemInstruction: 'You are a friendly and knowledgeable sales assistant for Biomedionics, a company that sells and services advanced biomedical devices. Your goal is to help users find the right products or services for their needs. Be concise, helpful, and professional. Our main products are the "Diasense DPN Scanner" for non-invasive Diabetic Peripheral Neuropathy detection, and the "3D Bioprinter X1" for research. We also offer maintenance and repair services.',
+                        },
+                    });
+                    setChat(newChat);
+                    setMessages([{
+                        role: ChatRole.MODEL,
+                        text: "Hello! I'm the Biomedionics assistant. How can I help you with our Diasense scanner or 3D bioprinters today?"
+                    }]);
+                } catch (error) {
+                     console.error("Failed to load AI module:", error);
+                     setMessages([{
+                        role: ChatRole.MODEL,
+                        text: "Sorry, the AI assistant could not be loaded."
+                     }]);
+                }
+            }
+        };
+
+        initializeChat();
     }, [isOpen, chat]);
 
 
@@ -116,7 +126,7 @@ const Chatbot: React.FC = () => {
                             </div>
                         </div>
                     ))}
-                    {isLoading && messages[messages.length-1].role === ChatRole.USER && (
+                    {isLoading && messages.length > 0 && messages[messages.length-1].role === ChatRole.USER && (
                          <div className="flex items-start gap-2.5 my-2">
                              <DnaIcon className="w-8 h-8 p-1.5 bg-blue-100 text-blue-600 rounded-full animate-pulse" />
                              <div className="flex flex-col max-w-[320px] leading-1.5 p-3 border-gray-200 rounded-xl bg-white rounded-bl-none">
