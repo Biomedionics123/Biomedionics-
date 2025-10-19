@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../contexts/AppContext';
-import { XIcon, getDisplayableGoogleDriveImageUrl, MapPinIcon } from '../components/IconComponents';
+import { XIcon, getDisplayableImageUrl, MapPinIcon, formatCurrency } from '../components/IconComponents';
 import type { CustomerDetails } from '../types';
 
 const CheckoutModal: React.FC<{onClose: () => void, onCheckout: (details: CustomerDetails) => void}> = ({onClose, onCheckout}) => {
@@ -140,10 +140,10 @@ const CartPage: React.FC = () => {
               {cart.map((item) => (
                 <div key={item.id} className="flex items-center justify-between p-4 border-b">
                   <div className="flex items-center">
-                    <img src={getDisplayableGoogleDriveImageUrl(item.imageUrl)} alt={item.name} className="w-20 h-20 object-cover rounded-md" />
+                    <img src={getDisplayableImageUrl(item.imageUrl)} alt={item.name} className="w-20 h-20 object-cover rounded-md" />
                     <div className="ml-4">
                       <Link to={`/products/${item.id}`} className="font-bold text-lg hover:text-blue-600">{item.name}</Link>
-                      <p className="text-gray-500">${item.price.toLocaleString()}</p>
+                      <p className="text-gray-500">{formatCurrency(item.price, item.currency)}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
@@ -155,7 +155,7 @@ const CartPage: React.FC = () => {
                       min="1"
                     />
                     <p className="font-semibold w-24 text-right">
-                      ${(item.price * item.quantity).toLocaleString()}
+                      {formatCurrency(item.price * item.quantity, item.currency)}
                     </p>
                     <button onClick={() => removeFromCart(item.id)} className="text-red-500 hover:text-red-700 font-bold text-xl">&times;</button>
                   </div>
@@ -163,7 +163,7 @@ const CartPage: React.FC = () => {
               ))}
               <div className="p-4 flex justify-end items-center">
                 <span className="text-xl font-bold">Total:</span>
-                <span className="text-xl font-bold ml-4">${cartTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                <span className="text-xl font-bold ml-4">{formatCurrency(cartTotal, cart.length > 0 ? cart[0].currency : 'USD')}</span>
               </div>
             </div>
             <div className="mt-6 text-right">

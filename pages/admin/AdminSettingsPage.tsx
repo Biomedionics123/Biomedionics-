@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAppContext } from '../../contexts/AppContext';
-import { getDisplayableGoogleDriveImageUrl } from '../../components/IconComponents';
+import { getDisplayableImageUrl } from '../../components/IconComponents';
 
 const AdminSettingsPage: React.FC = () => {
     const { siteSettings, setSiteSettings } = useAppContext();
@@ -13,8 +13,19 @@ const AdminSettingsPage: React.FC = () => {
       setSettingsForm(siteSettings);
     }, [siteSettings]);
 
-    const handleSettingsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSettingsForm({ ...settingsForm, [e.target.name]: e.target.value });
+    };
+    
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setSettingsForm(prev => ({ ...prev, awardImageUrl: reader.result as string }));
+            };
+            reader.readAsDataURL(file);
+        }
     };
     
     const handlePasswordFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,13 +69,13 @@ const AdminSettingsPage: React.FC = () => {
                     <h2 className="text-xl font-bold mb-4 text-gray-700">General Settings</h2>
                     <form onSubmit={handleSettingsSubmit} className="space-y-6">
                         <div>
-                           <label htmlFor="teamImageUrl" className="block font-medium mb-1 text-gray-700">Team Image URL</label>
-                           <input id="teamImageUrl" name="teamImageUrl" value={settingsForm.teamImageUrl} onChange={handleSettingsChange} className="w-full p-2 border rounded" />
-                           {settingsForm.teamImageUrl && <img src={getDisplayableGoogleDriveImageUrl(settingsForm.teamImageUrl)} alt="Team Preview" className="mt-4 rounded-md max-h-48" />}
+                           <label htmlFor="awardImageUrl" className="block font-medium mb-1 text-gray-700">Award Image</label>
+                           <input id="awardImageUrl" name="awardImageUrl" type="file" accept="image/*" onChange={handleImageChange} className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+                           {settingsForm.awardImageUrl && <img src={getDisplayableImageUrl(settingsForm.awardImageUrl)} alt="Award Image Preview" className="mt-4 rounded-md max-h-48" />}
                         </div>
                         <div>
                            <label htmlFor="awardText" className="block font-medium mb-1 text-gray-700">Award Text</label>
-                           <input id="awardText" name="awardText" value={settingsForm.awardText} onChange={handleSettingsChange} className="w-full p-2 border rounded" />
+                           <input id="awardText" name="awardText" value={settingsForm.awardText} onChange={handleTextChange} className="w-full p-2 border rounded" />
                         </div>
                         <div className="flex items-center gap-4">
                             <button type="submit" className="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition-colors">

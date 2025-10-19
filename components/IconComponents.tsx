@@ -1,15 +1,23 @@
 import React from 'react';
 
-export const getDisplayableGoogleDriveImageUrl = (url: string): string => {
+export const getDisplayableImageUrl = (url: string): string => {
     if (!url || typeof url !== 'string') return '';
-    if (!url.includes('drive.google.com')) return url;
-
-    const match = url.match(/drive\.google\.com.*\/d\/([^/]+)/);
-    if (match && match[1]) {
-        return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+    // If it's a Google Drive URL, transform it for direct display
+    if (url.includes('drive.google.com')) {
+        const match = url.match(/drive\.google\.com.*\/d\/([^/]+)/);
+        if (match && match[1]) {
+            return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+        }
     }
-    
+    // For data URLs (base64) or direct image URLs, return as is
     return url;
+};
+
+export const formatCurrency = (price: number, currency: 'USD' | 'PKR') => {
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: currency,
+    }).format(price);
 };
 
 export const DnaIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (

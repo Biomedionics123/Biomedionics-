@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAppContext } from '../../contexts/AppContext';
 import type { AppearanceSettings, CustomLink } from '../../types';
-import { getDisplayableGoogleDriveImageUrl } from '../../components/IconComponents';
+import { getDisplayableImageUrl } from '../../components/IconComponents';
 
 const AdminAppearancePage: React.FC = () => {
     const { appearanceSettings, setAppearanceSettings } = useAppContext();
@@ -104,7 +104,7 @@ const AdminAppearancePage: React.FC = () => {
                         <div>
                            <label htmlFor="logoUrl" className="block font-medium mb-1 text-gray-700">Logo</label>
                            <input id="logoUrl" name="logoUrl" type="file" accept="image/*" onChange={handleLogoChange} className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
-                           {formState.logoUrl && <img src={getDisplayableGoogleDriveImageUrl(formState.logoUrl)} alt="Logo Preview" className="mt-4 rounded-md max-h-16 bg-gray-200 p-2" />}
+                           {formState.logoUrl && <img src={getDisplayableImageUrl(formState.logoUrl)} alt="Logo Preview" className="mt-4 rounded-md max-h-16 bg-gray-200 p-2" />}
                         </div>
                          <div>
                            <label className="block font-medium mb-2 text-gray-700">Homepage Video</label>

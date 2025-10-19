@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAppContext } from '../contexts/AppContext';
-import { getDisplayableGoogleDriveImageUrl } from '../components/IconComponents';
+import { getDisplayableImageUrl } from '../components/IconComponents';
 
 const AboutPage: React.FC = () => {
   const { siteSettings } = useAppContext();
@@ -35,7 +35,7 @@ const AboutPage: React.FC = () => {
         </div>
 
         <div className="mt-16 text-center">
-             <img src={getDisplayableGoogleDriveImageUrl(siteSettings.teamImageUrl)} alt="Our Team" className="rounded-lg shadow-xl mx-auto" />
+             <img src={getDisplayableImageUrl(siteSettings.awardImageUrl)} alt="Our Team" className="rounded-lg shadow-xl mx-auto" />
              <p className="mt-6 text-xl text-yellow-500 font-semibold">&#9733; {siteSettings.awardText} &#9733;</p>
         </div>
       </div>

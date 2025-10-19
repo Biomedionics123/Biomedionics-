@@ -5,7 +5,7 @@ import { SERVICES } from '../constants';
 import { useAppContext } from '../contexts/AppContext';
 import { ReviewStatus } from '../types';
 import StarRating from '../components/StarRating';
-import { getDisplayableGoogleDriveImageUrl } from '../components/IconComponents';
+import { getDisplayableImageUrl } from '../components/IconComponents';
 
 // Helper to convert YouTube URL to embeddable URL
 const getYouTubeEmbedUrl = (url: string) => {
@@ -165,7 +165,7 @@ const HomePage: React.FC = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto text-center">
                 <h2 className="text-3xl font-bold text-gray-900">Award-Winning Innovation</h2>
-                <img src={getDisplayableGoogleDriveImageUrl(siteSettings.teamImageUrl)} alt="The Biomedionics Team" className="rounded-lg shadow-xl mx-auto my-8 w-full h-auto object-cover" style={{maxHeight: '400px'}} />
+                <img src={getDisplayableImageUrl(siteSettings.awardImageUrl)} alt="Award-winning innovation" className="rounded-lg shadow-xl mx-auto my-8 w-full h-auto object-cover" style={{maxHeight: '400px'}} />
                 <p className="text-xl text-yellow-500 font-semibold">
                   &#9733; {siteSettings.awardText} &#9733;
                 </p>

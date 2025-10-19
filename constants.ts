@@ -13,6 +13,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     imageUrl: 'https://picsum.photos/seed/diasense/600/400',
     price: 4999.99,
     stock: 10,
+    currency: 'USD',
   },
   {
     id: 'bioprinter-x1',
@@ -23,6 +24,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     imageUrl: 'https://picsum.photos/seed/bioprinter/600/400',
     price: 15000.00,
     stock: 5,
+    currency: 'USD',
   },
 ];
 
@@ -75,7 +77,7 @@ export const INITIAL_BLOG_POSTS: BlogPost[] = [
 ];
 
 export const INITIAL_SITE_SETTINGS: SiteSettings = {
-  teamImageUrl: 'https://picsum.photos/seed/team/1200/600',
+  awardImageUrl: 'https://picsum.photos/seed/team/1200/600',
   awardText: 'Proud Winners of the Pintech Expo 2025 Innovation Award for Diasense.',
   adminPassword: '1234',
 };
@@ -88,6 +90,51 @@ export const INITIAL_REVIEWS: Review[] = [
         rating: 5,
         comment: 'The Diasense scanner has been a game-changer for our clinic. The non-invasive nature is a huge plus for our patients, and the accuracy is top-notch. Highly recommended!',
         createdAt: '2024-07-25',
+        status: ReviewStatus.Approved,
+    },
+    {
+        id: 'review_2',
+        orderId: 'order_1722124800000',
+        customerName: 'Fatima Khan',
+        rating: 5,
+        comment: "An exceptional device. We've integrated the Diasense scanner into our diabetic clinic in Karachi, and the patient feedback has been overwhelmingly positive. It's fast, non-invasive, and provides results we can trust. A must-have for modern diabetic care.",
+        createdAt: '2024-07-28',
+        status: ReviewStatus.Approved,
+    },
+    {
+        id: 'review_3',
+        orderId: 'order_1721952000000',
+        customerName: 'Rohan Sharma',
+        rating: 5,
+        comment: 'Our research lab in Bangalore is achieving incredible results with the Bioprinter X1. The precision and multi-material capability are top-of-the-line. It has accelerated our tissue engineering projects significantly. A fantastic investment for any serious research institution.',
+        createdAt: '2024-07-26',
+        status: ReviewStatus.Approved,
+    },
+    {
+        id: 'review_4',
+        orderId: 'order_1721520000000',
+        customerName: 'Ali Ahmed',
+        rating: 5,
+        comment: "Our hospital in Lahore recently acquired the Diasense scanner. The training and support from Biomedionics were excellent. The device itself is incredibly user-friendly and has significantly improved our diagnostic workflow for neuropathy. Highly impressive technology.",
+        createdAt: '2024-07-21',
+        status: ReviewStatus.Approved,
+    },
+    {
+        id: 'review_5',
+        orderId: 'order_1721001600000',
+        customerName: 'Priya Patel',
+        rating: 5,
+        comment: "As a PhD student in Mumbai, having access to the Bioprinter X1 has been a game-changer for my thesis work. The software is intuitive, and the prints are consistent and high-resolution. It's an amazing machine that's pushing the boundaries of what we can do in regenerative medicine.",
+        createdAt: '2024-07-15',
+        status: ReviewStatus.Approved,
+    },
+    {
+        id: 'review_6',
+        orderId: 'order_1720569600000',
+        customerName: 'Ayesha Malik',
+        rating: 4,
+        comment: "A very good tool for early DPN screening. It's much better than the older methods. My only suggestion would be to add a more detailed reporting feature in the software. Otherwise, it's a solid piece of equipment for any endocrinologist.",
+        createdAt: '2024-07-10',
         status: ReviewStatus.Approved,
     }
 ];

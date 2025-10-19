@@ -1,6 +1,6 @@
 import React, { useState, FormEvent } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { DnaIcon, MenuIcon, XIcon, ShoppingCartIcon, SearchIcon, HeartIcon, getDisplayableGoogleDriveImageUrl } from './IconComponents';
+import { DnaIcon, MenuIcon, XIcon, ShoppingCartIcon, SearchIcon, HeartIcon, getDisplayableImageUrl } from './IconComponents';
 import { useAppContext } from '../contexts/AppContext';
 
 const Header: React.FC = () => {
@@ -47,7 +47,7 @@ const Header: React.FC = () => {
           <div className="flex items-center">
             <Link to="/" className="flex-shrink-0 flex items-center gap-2">
               {logoUrl ? (
-                <img src={getDisplayableGoogleDriveImageUrl(logoUrl)} alt={`${siteName} Logo`} className="h-10 w-auto" />
+                <img src={getDisplayableImageUrl(logoUrl)} alt={`${siteName} Logo`} className="h-10 w-auto" />
               ) : (
                 <DnaIcon className="h-8 w-8" style={{ color: primaryColor }} />
               )}

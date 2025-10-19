@@ -4,7 +4,13 @@ import { ReviewStatus } from '../../types';
 import StarRating from '../../components/StarRating';
 
 const AdminReviewsPage: React.FC = () => {
-    const { reviews, updateReviewStatus } = useAppContext();
+    const { reviews, updateReviewStatus, deleteReview } = useAppContext();
+
+    const handleDeleteReview = (reviewId: string) => {
+        if (window.confirm('Are you sure you want to permanently delete this review? This action cannot be undone.')) {
+            deleteReview(reviewId);
+        }
+    };
 
     const getStatusColor = (status: ReviewStatus) => {
         switch (status) {
@@ -38,22 +44,32 @@ const AdminReviewsPage: React.FC = () => {
                                 </div>
                             </div>
                             <p className="mt-3 text-gray-700 italic">"{review.comment}"</p>
-                            {review.status === ReviewStatus.Pending && (
-                                <div className="mt-4 flex gap-3">
-                                    <button 
-                                        onClick={() => updateReviewStatus(review.id, ReviewStatus.Approved)} 
-                                        className="bg-green-500 text-white text-sm py-1 px-3 rounded-md hover:bg-green-600"
-                                    >
-                                        Approve
-                                    </button>
-                                    <button 
-                                        onClick={() => updateReviewStatus(review.id, ReviewStatus.Rejected)} 
-                                        className="bg-red-500 text-white text-sm py-1 px-3 rounded-md hover:bg-red-600"
-                                    >
-                                        Reject
-                                    </button>
+                            <div className="mt-4 flex justify-between items-center">
+                                <div className="flex gap-3">
+                                    {review.status === ReviewStatus.Pending && (
+                                        <>
+                                            <button 
+                                                onClick={() => updateReviewStatus(review.id, ReviewStatus.Approved)} 
+                                                className="bg-green-500 text-white text-sm py-1 px-3 rounded-md hover:bg-green-600"
+                                            >
+                                                Approve
+                                            </button>
+                                            <button 
+                                                onClick={() => updateReviewStatus(review.id, ReviewStatus.Rejected)} 
+                                                className="bg-yellow-500 text-white text-sm py-1 px-3 rounded-md hover:bg-yellow-600"
+                                            >
+                                                Reject
+                                            </button>
+                                        </>
+                                    )}
                                 </div>
-                            )}
+                                <button 
+                                    onClick={() => handleDeleteReview(review.id)} 
+                                    className="bg-red-500 text-white text-sm py-1 px-3 rounded-md hover:bg-red-600"
+                                >
+                                    Delete
+                                </button>
+                            </div>
                         </div>
                     )) : (
                         <p className="text-center text-gray-500 py-8">No customer reviews have been submitted yet.</p>

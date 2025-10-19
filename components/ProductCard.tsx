@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Product } from '../types';
 import { Link } from 'react-router-dom';
-import { HeartIcon, getDisplayableGoogleDriveImageUrl } from './IconComponents';
+import { HeartIcon, getDisplayableImageUrl, formatCurrency } from './IconComponents';
 import { useAppContext } from '../contexts/AppContext';
 
 interface ProductCardProps {
@@ -41,13 +41,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
       <Link to={`/products/${product.id}`} className="block">
         <div className="bg-white rounded-lg shadow-md overflow-hidden transform group-hover:-translate-y-1 transition-all duration-300 h-full flex flex-col">
-          <img className="w-full h-56 object-cover object-center" src={getDisplayableGoogleDriveImageUrl(product.imageUrl)} alt={product.name} />
+          <img className="w-full h-56 object-cover object-center" src={getDisplayableImageUrl(product.imageUrl)} alt={product.name} />
           <div className="p-6 flex flex-col flex-grow">
             <h3 className="text-sm text-blue-500 font-semibold tracking-widest uppercase">{product.category}</h3>
             <h2 className="text-xl font-semibold text-gray-900 mt-1">{product.name}</h2>
             <p className="text-gray-600 mt-2 text-base flex-grow">{product.description}</p>
             <p className="text-lg font-bold text-gray-800 mt-4">
-              ${product.price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              {formatCurrency(product.price, product.currency)}
             </p>
           </div>
         </div>

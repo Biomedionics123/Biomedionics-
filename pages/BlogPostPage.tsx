@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAppContext } from '../contexts/AppContext';
-import { DownloadIcon, FileIcon, getDisplayableGoogleDriveImageUrl } from '../components/IconComponents';
+import { DownloadIcon, FileIcon, getDisplayableImageUrl } from '../components/IconComponents';
 
 const BlogPostPage: React.FC = () => {
     const { postId } = useParams<{ postId: string }>();
@@ -26,7 +26,7 @@ const BlogPostPage: React.FC = () => {
                         <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">{post.title}</h1>
                         <p className="text-lg text-gray-500 mt-4">By {post.author} on {new Date(post.date).toLocaleDateString()}</p>
                     </header>
-                    <img src={getDisplayableGoogleDriveImageUrl(post.imageUrl)} alt={post.title} className="w-full h-auto rounded-lg shadow-lg mb-8" />
+                    <img src={getDisplayableImageUrl(post.imageUrl)} alt={post.title} className="w-full h-auto rounded-lg shadow-lg mb-8" />
                     <div 
                         className="prose prose-lg max-w-none text-gray-700"
                         dangerouslySetInnerHTML={{ __html: post.content }} 

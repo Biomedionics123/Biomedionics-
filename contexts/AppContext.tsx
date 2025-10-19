@@ -41,6 +41,7 @@ interface AppContextType {
     reviews: Review[];
     addReview: (order: Order, rating: number, comment: string) => void;
     updateReviewStatus: (reviewId: string, status: ReviewStatus) => void;
+    deleteReview: (reviewId: string) => void;
     notifications: Notification[];
     addNotification: (notification: Omit<Notification, 'id' | 'createdAt' | 'isRead'>) => void;
     markNotificationAsRead: (notificationId: string) => void;
@@ -80,6 +81,11 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({ children
 
     const addToCart = (product: Product, quantity: number) => {
         setCart(prevCart => {
+            if (prevCart.length > 0 && product.currency !== prevCart[0].currency) {
+                alert(`You can only add products with the same currency to your cart. Please clear your cart or continue shopping with ${prevCart[0].currency}.`);
+                return prevCart;
+            }
+
             const existingItem = prevCart.find(item => item.id === product.id);
             const productInStock = products.find(p => p.id === product.id);
             const availableStock = productInStock ? productInStock.stock : 0;
@@ -148,6 +154,7 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({ children
             customerDetails,
             items: cart,
             total: cartTotal,
+            currency: cart.length > 0 ? cart[0].currency : 'USD',
             status: OrderStatus.Pending,
             createdAt: new Date().toISOString(),
             reviewSubmitted: false,
@@ -164,14 +171,10 @@ export const AppContextProvider: React.FC<{ children: ReactNode }> = ({ children
         setProducts(newProducts);
 
         const orderItemsSummary = cart.map(item => 
-            `- ${item.name} (x${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`
+            `- ${item.name} (x${item.quantity}) - ${(item.price * item.quantity).toFixed(2)} ${item.currency}`
         ).join('\n');
 
-        addNotification({
-            type: NotificationType.NewOrder,
-            subject: `New Order Received: ${newOrder.id}`,
-            from: customerDetails.email,
-            body: `
+        const notificationBody = `
 A new order has been placed on the website.
 
 CUSTOMER DETAILS:
@@ -182,9 +185,20 @@ Address: ${customerDetails.address}
 ORDER SUMMARY:
 ${orderItemsSummary}
 -------------------------
-TOTAL: $${cartTotal.toFixed(2)}
-            `,
+TOTAL: ${cartTotal.toFixed(2)} ${newOrder.currency}
+            `;
+
+        addNotification({
+            type: NotificationType.NewOrder,
+            subject: `New Order Received: ${newOrder.id}`,
+            from: customerDetails.email,
+            body: notificationBody,
         });
+        
+        // Simulate sending an email by opening the user's default email client
+        const emailSubject = `New Order Received: ${newOrder.id}`;
+        const mailtoLink = `mailto:biomedionics@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(notificationBody)}`;
+        window.location.href = mailtoLink;
 
         clearCart();
         return newOrder;
@@ -220,6 +234,10 @@ TOTAL: $${cartTotal.toFixed(2)}
         );
     };
 
+    const deleteReview = (reviewId: string) => {
+        setReviews(prevReviews => prevReviews.filter(review => review.id !== reviewId));
+    };
+
     return (
         <AppContext.Provider value={{
             products, setProducts,
@@ -230,7 +248,7 @@ TOTAL: $${cartTotal.toFixed(2)}
             cart, addToCart, updateCartQuantity, removeFromCart, clearCart, cartTotal,
             wishlist, addToWishlist, removeFromWishlist, isInWishlist,
             orders, addOrder, updateOrderStatus,
-            reviews, addReview, updateReviewStatus,
+            reviews, addReview, updateReviewStatus, deleteReview,
             notifications, addNotification, markNotificationAsRead, markAllNotificationsAsRead
         }}>
             {children}

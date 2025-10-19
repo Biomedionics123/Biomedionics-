@@ -2,6 +2,7 @@
 import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import type { Order } from '../types';
+import { formatCurrency } from '../components/IconComponents';
 
 const OrderConfirmationPage: React.FC = () => {
     const location = useLocation();
@@ -28,13 +29,13 @@ const OrderConfirmationPage: React.FC = () => {
                             {order.items.map(item => (
                                 <div key={item.id} className="flex justify-between">
                                     <span>{item.name} (x{item.quantity})</span>
-                                    <span>${(item.price * item.quantity).toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                                    <span>{formatCurrency(item.price * item.quantity, order.currency)}</span>
                                 </div>
                             ))}
                         </div>
                         <div className="flex justify-between font-bold text-lg mt-4 border-t pt-4">
                             <span>Total</span>
-                            <span>${order.total.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                            <span>{formatCurrency(order.total, order.currency)}</span>
                         </div>
                         <div className="mt-6">
                              <h3 className="font-bold">Shipping to:</h3>

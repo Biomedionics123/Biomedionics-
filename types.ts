@@ -9,6 +9,7 @@ export interface Product {
   imageUrl: string;
   price: number;
   stock: number;
+  currency: 'USD' | 'PKR';
 }
 
 export interface Service {
@@ -35,7 +36,7 @@ export interface BlogPost {
 }
 
 export interface SiteSettings {
-  teamImageUrl: string;
+  awardImageUrl: string;
   awardText: string;
   adminPassword: string;
 }
@@ -99,6 +100,7 @@ export interface Order {
   customerDetails: CustomerDetails;
   items: CartItem[];
   total: number;
+  currency: 'USD' | 'PKR';
   status: OrderStatus;
   createdAt: string;
   reviewSubmitted: boolean;
