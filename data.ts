@@ -11,9 +11,9 @@ export const INITIAL_PRODUCTS: Product[] = [
     longDescription: 'The Diasense DPN Scanner utilizes advanced biosensors to provide a rapid, painless, and accurate assessment of nerve function. It is designed for clinical use, enabling healthcare providers to detect DPN in its earliest stages, facilitating timely intervention and improved patient outcomes. Its user-friendly interface and quick results make it an essential tool for any diabetes care practice.',
     category: 'Neuropathy Screening',
     imageUrl: 'https://picsum.photos/seed/diasense/600/400',
-    price: 4999.99,
+    price: 100000,
     stock: 10,
-    currency: 'USD',
+    currency: 'PKR',
   },
   {
     id: 'bioprinter-x1',
@@ -22,9 +22,9 @@ export const INITIAL_PRODUCTS: Product[] = [
     longDescription: 'The 3D Bioprinter X1 offers exceptional resolution and multi-material capabilities, empowering researchers to fabricate intricate tissue scaffolds, organoids, and other biological constructs. With its sterile printing environment and intuitive software, the X1 is the perfect platform for advancing research in regenerative medicine, drug discovery, and personalized therapeutics.',
     category: 'Bioprinting',
     imageUrl: 'https://picsum.photos/seed/bioprinter/600/400',
-    price: 15000.00,
+    price: 150000,
     stock: 5,
-    currency: 'USD',
+    currency: 'PKR',
   },
 ];
 
