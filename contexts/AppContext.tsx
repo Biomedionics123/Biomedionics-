@@ -194,11 +194,6 @@ TOTAL: ${cartTotal.toFixed(2)} ${newOrder.currency}
             from: customerDetails.email,
             body: notificationBody,
         });
-        
-        // Simulate sending an email by opening the user's default email client
-        const emailSubject = `New Order Received: ${newOrder.id}`;
-        const mailtoLink = `mailto:biomedionics@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(notificationBody)}`;
-        window.location.href = mailtoLink;
 
         clearCart();
         return newOrder;

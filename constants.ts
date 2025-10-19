@@ -84,15 +84,6 @@ export const INITIAL_SITE_SETTINGS: SiteSettings = {
 
 export const INITIAL_REVIEWS: Review[] = [
     {
-        id: 'review_1',
-        orderId: 'order_1625247600000',
-        customerName: 'John Doe',
-        rating: 5,
-        comment: 'The Diasense scanner has been a game-changer for our clinic. The non-invasive nature is a huge plus for our patients, and the accuracy is top-notch. Highly recommended!',
-        createdAt: '2024-07-25',
-        status: ReviewStatus.Approved,
-    },
-    {
         id: 'review_2',
         orderId: 'order_1722124800000',
         customerName: 'Fatima Khan',
