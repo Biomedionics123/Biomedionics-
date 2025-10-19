@@ -107,7 +107,7 @@ export const INITIAL_APPEARANCE_SETTINGS: AppearanceSettings = {
     siteName: 'Biomedionics',
     logoUrl: '', // Default empty logo
     videoSource: 'youtube',
-    homepageVideoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', // Default video
+    homepageVideoUrl: 'https://www.youtube.com/watch?v=SxTYjptEzZs&list=RDSxTYjptEzZs&start_radio=1', // Default video
     homepageVideoData: '',
     primaryColor: '#2563EB', // blue-600
     secondaryColor: '#4F46E5', // indigo-600
