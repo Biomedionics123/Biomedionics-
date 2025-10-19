@@ -5,7 +5,18 @@ import { ChatBubbleIcon, XIcon, SendIcon, DnaIcon } from './IconComponents';
 import type { ChatMessage } from '../types';
 import { ChatRole } from '../types';
 
-const API_KEY = typeof process !== 'undefined' && process.env ? process.env.API_KEY : undefined;
+// Safely attempt to get the API key. This will prevent "process is not defined" errors.
+const API_KEY = (() => {
+    try {
+        if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
+            return process.env.API_KEY;
+        }
+    } catch (e) {
+        // Silently fail if process or process.env access fails.
+    }
+    return undefined;
+})();
+
 
 const Chatbot: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -26,7 +37,6 @@ const Chatbot: React.FC = () => {
 
     useEffect(() => {
         if (!API_KEY) {
-            console.error("API_KEY is not set. Please set the API_KEY environment variable.");
             return;
         }
         if (isOpen && !chat) {
@@ -76,6 +86,11 @@ const Chatbot: React.FC = () => {
             setIsLoading(false);
         }
     };
+
+    // If no API KEY is available, disable the chatbot feature entirely to prevent crashes.
+    if (!API_KEY) {
+        return null;
+    }
 
     return (
         <>
